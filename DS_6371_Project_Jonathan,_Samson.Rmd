@@ -1,0 +1,511 @@
+---
+title: "DS 6371 Project - House Prices Analysis"
+author: "Jonathan Rocha & Samson Akomolafe"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: cerulean
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    toc_collapsed: true
+    code_folding: show
+runtime: shiny
+editor_options: 
+  chunk_output_type: inline
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+# Load required libraries
+library(shiny)
+library(shinyjs)
+library(shinythemes)
+library(tidyverse)
+library(DT)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+library(ggrepel)
+library(car)       # For regression diagnostics
+library(caret)     # For model training and evaluation
+library(leaps)     # For model selection
+library(MASS)      # For stepwise regression
+library(lmtest)    # For model testing
+library(glmnet)    # For regularized regression
+```
+
+# Introduction
+
+This analysis explores the Ames Housing dataset, which contains
+information on residential homes in Ames, Iowa. The dataset includes 79
+explanatory variables describing various aspects of the homes, with the
+goal of predicting the final sale price of each property.
+
+Our analysis is divided into two main parts:
+
+1.  **Analysis 1**: Examining how house sale prices relate to living
+    area (GrLivArea) in three specific neighborhoods (NAmes, Edwards,
+    and BrkSide) for Century 21 Ames.
+
+2.  **Analysis 2**: Building predictive models for house prices across
+    all neighborhoods in Ames, Iowa.
+
+# Data Description
+
+The Ames Housing dataset was compiled by Dean De Cock for use in data
+science education. It contains information on residential homes in Ames,
+Iowa, with 79 explanatory variables describing almost every aspect of
+the properties.
+
+-   **Source**: Kaggle competition "House Prices - Advanced Regression
+    Techniques"
+-   **Training set**: 1,460 observations
+-   **Test set**: 1,459 observations
+-   **Target variable**: SalePrice (the property's sale price in
+    dollars)
+
+```{r load_data}
+# Load the datasets
+train <- read.csv("~/Desktop/DS_6371_Project/house-prices-advanced-regression-techniques/train.csv")
+test <- read.csv("~/Desktop/DS_6371_Project/house-prices-advanced-regression-techniques/test.csv")
+
+# Display basic information about the training dataset
+cat("Training set dimensions:", dim(train)[1], "rows,", dim(train)[2], "columns\n")
+cat("Test set dimensions:", dim(test)[1], "rows,", dim(test)[2], "columns\n")
+```
+
+## Data Exploration
+
+Let's first explore the structure of the data and get a summary of the
+key variables.
+
+```{r data_structure}
+# Check the structure of the training dataset
+str(train[, 1:10])  # Showing only the first 10 columns for brevity
+```
+
+```{r data_summary}
+# Summary of key variables
+summary(train[, c("SalePrice", "GrLivArea", "FullBath", "Neighborhood")])
+```
+
+```{r missing_values}
+# Check for missing values in the training set
+missing_values <- colSums(is.na(train))
+missing_values[missing_values > 0]
+```
+
+## Data Visualization
+
+Let's visualize the distribution of the target variable (SalePrice) and
+its relationship with the living area (GrLivArea).
+
+```{r price_distribution}
+# Distribution of SalePrice
+ggplot(train, aes(x = SalePrice)) +
+  geom_histogram(fill = "steelblue", bins = 30) +
+  scale_x_continuous(labels = scales::comma) +
+  labs(title = "Distribution of Sale Prices",
+       x = "Sale Price ($)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+```{r price_vs_area}
+# Relationship between SalePrice and GrLivArea
+ggplot(train, aes(x = GrLivArea, y = SalePrice)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = TRUE) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "Sale Price vs. Living Area",
+       x = "Above Grade (Ground) Living Area (sq ft)",
+       y = "Sale Price ($)") +
+  theme_minimal()
+```
+
+# Analysis 1: Century 21 Ames Neighborhood Analysis
+
+## Restatement of Problem
+
+Century 21 Ames, a real estate company in Ames, Iowa, has commissioned
+us to analyze how the sale price of houses is related to the square
+footage of the living area (GrLivArea) and whether this relationship
+varies by neighborhood. The company only sells houses in three
+neighborhoods: NAmes, Edwards, and BrkSide.
+
+Our task is to: 1. Build a model that relates sale price to living area
+2. Determine if this relationship differs by neighborhood 3. Provide
+estimates and confidence intervals for the relationship 4. Ensure model
+assumptions are met and address any outliers 5. Present the results in
+terms of 100 sq. ft. increments of living area
+
+```{r century21_data}
+# Filter data for the three neighborhoods of interest
+century21_data <- train %>%
+  filter(Neighborhood %in% c("NAmes", "Edwards", "BrkSide"))
+
+# Count of houses in each neighborhood
+table(century21_data$Neighborhood)
+
+# Basic statistics by neighborhood
+century21_data %>%
+  group_by(Neighborhood) %>%
+  summarize(
+    Count = n(),
+    Mean_Price = mean(SalePrice),
+    Median_Price = median(SalePrice),
+    Mean_Area = mean(GrLivArea),
+    Median_Area = median(GrLivArea)
+  ) %>%
+  knitr::kable(digits = 2)
+```
+
+```{r century21_visualization}
+# Visualize the relationship between SalePrice and GrLivArea by neighborhood
+ggplot(century21_data, aes(x = GrLivArea, y = SalePrice, color = Neighborhood)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "Sale Price vs. Living Area by Neighborhood",
+       x = "Above Grade (Ground) Living Area (sq ft)",
+       y = "Sale Price ($)") +
+  theme_minimal()
+```
+
+## Build and Fit the Model
+
+We'll build several models to examine the relationship between sale
+price and living area, considering the neighborhood effect:
+
+1.  A simple linear regression model with GrLivArea as the predictor
+2.  A model with GrLivArea and Neighborhood as predictors
+3.  A model with interaction between GrLivArea and Neighborhood
+
+```{r century21_models}
+# Scale GrLivArea to 100 sq ft units for easier interpretation
+century21_data$GrLivArea_100 <- century21_data$GrLivArea / 100
+
+# Model 1: Simple linear regression
+model1 <- lm(SalePrice ~ GrLivArea_100, data = century21_data)
+
+# Model 2: Including neighborhood
+model2 <- lm(SalePrice ~ GrLivArea_100 + Neighborhood, data = century21_data)
+
+# Model 3: Including interaction
+model3 <- lm(SalePrice ~ GrLivArea_100 * Neighborhood, data = century21_data)
+
+# Summary of models
+summary(model1)
+summary(model2)
+summary(model3)
+```
+
+## Checking Assumptions
+
+We'll check the assumptions for the best model: 1. Linearity 2.
+Independence 3. Normality 4. Equal variance (homoscedasticity)
+
+```{r model_assumptions}
+# Assuming model3 is the best model based on the results
+par(mfrow = c(2, 2))
+plot(model3)
+```
+
+## Influential Point Analysis
+
+We'll identify and analyze potential outliers and influential points.
+
+```{r influential_points}
+# Calculate Cook's distance
+cooksd <- cooks.distance(model3)
+
+# Plot Cook's distance
+plot(cooksd, pch = 19, main = "Cook's Distance", ylab = "Cook's Distance")
+abline(h = 4/nrow(century21_data), col = "red")  # Threshold line
+
+# Identify influential points
+influential_points <- which(cooksd > 4/nrow(century21_data))
+century21_data[influential_points, c("Id", "Neighborhood", "GrLivArea", "SalePrice")]
+```
+
+## Comparing Competing Models
+
+We'll compare the models using various metrics:
+
+```{r model_comparison}
+# Function to calculate CV PRESS
+cv_press <- function(model) {
+  pr <- residuals(model)/(1 - hatvalues(model))
+  sum(pr^2)
+}
+
+# Compare models
+model_comparison <- data.frame(
+  Model = c("Model 1: GrLivArea", 
+            "Model 2: GrLivArea + Neighborhood", 
+            "Model 3: GrLivArea * Neighborhood"),
+  Adj_R2 = c(summary(model1)$adj.r.squared,
+             summary(model2)$adj.r.squared,
+             summary(model3)$adj.r.squared),
+  CV_PRESS = c(cv_press(model1),
+               cv_press(model2),
+               cv_press(model3)),
+  AIC = c(AIC(model1),
+          AIC(model2),
+          AIC(model3))
+)
+
+knitr::kable(model_comparison, digits = 4)
+```
+
+## Parameter Estimates and Interpretation
+
+We'll provide estimates and confidence intervals for the parameters of
+the best model.
+
+```{r parameter_estimates}
+# Confidence intervals for the best model
+conf_int <- confint(model3, level = 0.95)
+conf_int
+```
+
+## Conclusion for Analysis 1
+
+[This section will be completed after running the analysis and
+interpreting the results]
+
+# Analysis 2: Predictive Modeling for All Neighborhoods
+
+## Restatement of Problem
+
+For this analysis, we need to build the most predictive model for sale
+prices of homes in all of Ames, Iowa. We'll create at least three
+competing models:
+
+1.  A simple linear regression model
+2.  A multiple linear regression model with GrLivArea and FullBath as
+    predictors
+3.  At least one additional multiple linear regression model with
+    selected variables
+
+We'll compare these models using adjusted R², CV PRESS, AIC, and Kaggle
+Score.
+
+```{r all_data_exploration}
+# Explore relationships between SalePrice and key variables
+par(mfrow = c(2, 2))
+plot(train$GrLivArea, train$SalePrice, main = "SalePrice vs GrLivArea", 
+     xlab = "GrLivArea", ylab = "SalePrice")
+plot(train$FullBath, train$SalePrice, main = "SalePrice vs FullBath", 
+     xlab = "FullBath", ylab = "SalePrice")
+plot(train$YearBuilt, train$SalePrice, main = "SalePrice vs YearBuilt", 
+     xlab = "YearBuilt", ylab = "SalePrice")
+plot(train$OverallQual, train$SalePrice, main = "SalePrice vs OverallQual", 
+     xlab = "OverallQual", ylab = "SalePrice")
+```
+
+## Candidate Models
+
+### Simple Linear Regression
+
+```{r slr_model}
+# Simple linear regression with GrLivArea
+slr_model <- lm(SalePrice ~ GrLivArea, data = train)
+summary(slr_model)
+```
+
+### Multiple Linear Regression 1
+
+```{r mlr1_model}
+# Multiple linear regression with GrLivArea and FullBath
+mlr1_model <- lm(SalePrice ~ GrLivArea + FullBath, data = train)
+summary(mlr1_model)
+```
+
+### Multiple Linear Regression 2
+
+For our third model, we'll select variables based on correlation with
+SalePrice and domain knowledge.
+
+```{r variable_selection}
+# Calculate correlations with SalePrice
+numeric_vars <- sapply(train, is.numeric)
+correlations <- cor(train[, numeric_vars], train$SalePrice, use = "complete.obs")
+correlations <- sort(abs(correlations), decreasing = TRUE)
+head(correlations, 10)
+```
+
+```{r mlr2_model}
+# Multiple linear regression with selected variables
+mlr2_model <- lm(SalePrice ~ GrLivArea + OverallQual + YearBuilt + 
+                  TotalBsmtSF + GarageCars, data = train)
+summary(mlr2_model)
+```
+
+## Checking Assumptions
+
+We'll check the assumptions for the best model.
+
+```{r mlr2_assumptions}
+# Check assumptions for MLR2 model
+par(mfrow = c(2, 2))
+plot(mlr2_model)
+```
+
+## Influential Point Analysis
+
+```{r mlr2_influential}
+# Calculate Cook's distance for MLR2
+cooksd_mlr2 <- cooks.distance(mlr2_model)
+
+# Plot Cook's distance
+plot(cooksd_mlr2, pch = 19, main = "Cook's Distance", ylab = "Cook's Distance")
+abline(h = 4/nrow(train), col = "red")  # Threshold line
+
+# Identify influential points
+influential_points_mlr2 <- which(cooksd_mlr2 > 4/nrow(train))
+head(train[influential_points_mlr2, c("Id", "GrLivArea", "SalePrice")], 10)
+```
+
+## Comparing Competing Models
+
+```{r all_model_comparison}
+# Compare all models
+all_model_comparison <- data.frame(
+  Model = c("Simple Linear Regression", 
+            "Multiple Linear Regression 1", 
+            "Multiple Linear Regression 2"),
+  Adj_R2 = c(summary(slr_model)$adj.r.squared,
+             summary(mlr1_model)$adj.r.squared,
+             summary(mlr2_model)$adj.r.squared),
+  CV_PRESS = c(cv_press(slr_model),
+               cv_press(mlr1_model),
+               cv_press(mlr2_model)),
+  AIC = c(AIC(slr_model),
+          AIC(mlr1_model),
+          AIC(mlr2_model)),
+  Kaggle_Score = c(NA, NA, NA)  # To be filled after submission
+)
+
+knitr::kable(all_model_comparison, digits = 4)
+```
+
+## Kaggle Submission
+
+We'll prepare predictions for the test set using our best model and
+create a submission file for Kaggle.
+
+```{r kaggle_submission, eval=FALSE}
+# Predict on test set using the best model (MLR2)
+predictions <- predict(mlr2_model, newdata = test)
+
+# Create submission file
+submission <- data.frame(
+  Id = test$Id,
+  SalePrice = predictions
+)
+
+# Write to CSV
+write.csv(submission, "submission.csv", row.names = FALSE)
+```
+
+## Conclusion for Analysis 2
+
+[This section will be completed after running the analysis and
+interpreting the results]
+
+# R Shiny App: Price vs. Living Area Chart
+
+```{r shiny_app, echo=TRUE}
+# Define UI
+ui <- fluidPage(
+  titlePanel("House Price vs. Living Area by Neighborhood"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      checkboxGroupInput("neighborhoods", 
+                         "Select Neighborhoods:",
+                         choices = c("NAmes", "Edwards", "BrkSide"),
+                         selected = c("NAmes", "Edwards", "BrkSide")),
+      
+      sliderInput("area_range", 
+                  "Living Area Range (sq ft):",
+                  min = min(century21_data$GrLivArea),
+                  max = max(century21_data$GrLivArea),
+                  value = c(min(century21_data$GrLivArea), 
+                            max(century21_data$GrLivArea))),
+      
+      checkboxInput("show_regression", 
+                    "Show Regression Line", 
+                    value = TRUE),
+      
+      checkboxInput("show_confidence", 
+                    "Show Confidence Interval", 
+                    value = TRUE)
+    ),
+    
+    mainPanel(
+      plotlyOutput("scatterplot"),
+      br(),
+      tableOutput("neighborhood_stats")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output) {
+  
+  # Filter data based on user input
+  filtered_data <- reactive({
+    century21_data %>%
+      filter(Neighborhood %in% input$neighborhoods,
+             GrLivArea >= input$area_range[1],
+             GrLivArea <= input$area_range[2])
+  })
+  
+  # Create scatterplot
+  output$scatterplot <- renderPlotly({
+    p <- ggplot(filtered_data(), aes(x = GrLivArea, y = SalePrice, color = Neighborhood)) +
+      geom_point(alpha = 0.7) +
+      scale_y_continuous(labels = scales::comma) +
+      labs(title = "Sale Price vs. Living Area",
+           x = "Above Grade (Ground) Living Area (sq ft)",
+           y = "Sale Price ($)") +
+      theme_minimal()
+    
+    if (input$show_regression) {
+      p <- p + geom_smooth(method = "lm", se = input$show_confidence)
+    }
+    
+    ggplotly(p)
+  })
+  
+  # Create neighborhood statistics table
+  output$neighborhood_stats <- renderTable({
+    filtered_data() %>%
+      group_by(Neighborhood) %>%
+      summarize(
+        Count = n(),
+        `Mean Price` = mean(SalePrice),
+        `Median Price` = median(SalePrice),
+        `Mean Area` = mean(GrLivArea),
+        `Median Area` = median(GrLivArea),
+        `Price per sq ft` = mean(SalePrice) / mean(GrLivArea)
+      ) %>%
+      arrange(desc(`Mean Price`))
+  }, digits = 0)
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+```
+
+# Appendix: R Code
+
+All the R code used in this analysis is included in the R Markdown
+document.

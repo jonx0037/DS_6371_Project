@@ -1,0 +1,18 @@
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+# Load required libraries
+library(shiny)
+library(shinyjs)
+library(shinythemes)
+library(tidyverse)
+library(DT)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+library(ggrepel)
+library(car)       # For regression diagnostics
+library(caret)     # For model training and evaluation
+library(leaps)     # For model selection
+library(MASS)      # For stepwise regression
+library(lmtest)    # For model testing
+library(glmnet)    # For regularized regression

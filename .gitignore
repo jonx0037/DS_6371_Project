@@ -1,0 +1,38 @@
+# R specific
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.html
+.Rapp.history
+
+# Rendered documents
+*.html
+*.pdf
+*.docx
+*.rtf
+
+# Session Data
+.RData
+.RDataTmp
+
+# User-specific files
+.Ruserdata
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# Temporary files
+*~
+~
+*.bak
+*.swp
+
+# OS-specific files
+.DS_Store
+.Spotlight-V100
+.Trashes
+Thumbs.db
