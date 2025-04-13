@@ -18,16 +18,16 @@ jobs:
         with:
           node-version: '16'
           cache: 'npm'
-          cache-dependency-path: docs/package-lock.json
+          cache-dependency-path: docs/6371-project-react-app/package-lock.json
 
       - name: Install Dependencies 📦
         run: |
-          cd docs
+          cd docs/6371-project-react-app
           npm ci
 
       - name: Build 🔧
         run: |
-          cd docs
+          cd docs/6371-project-react-app
           npm run build
         env:
           CI: false
@@ -35,5 +35,5 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: docs/build
+          folder: docs/6371-project-react-app/build
           branch: gh-pages
