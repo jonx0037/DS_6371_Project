@@ -1,6 +1,6 @@
 # DS 6371 Project: House Prices Analysis
 
-This repository contains the data science project for DS 6371 (Statistical Analysis with R) at Southern Methodist University, Spring 2025. The project analyzes house prices in Ames, Iowa using regression techniques.
+This repository contains the data science project for DS 6371 (Statistical Foundations for Data Science) at Southern Methodist University, Spring 2025. The project analyzes house prices in Ames, Iowa using regression techniques.
 
 ## Authors
 
