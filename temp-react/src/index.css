@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Arial', 'sans-serif';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'Source Code Pro', monospace;
+}
+
+main {
+  min-height: calc(100vh - 150px);
+  padding: 20px;
+}
+
+/* Add global styles for data visualizations */
+.visualization-container {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  color: #2c7fb8;
+  margin-bottom: 1rem;
+}
+
+.highlight {
+  color: #5ab4ac;
+  font-weight: 500;
+}
