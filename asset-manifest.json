@@ -1,15 +1,14 @@
 {
   "files": {
-    "main.css": "/DS_6371_Project/static/css/main.1683fa87.css",
-    "main.js": "/DS_6371_Project/static/js/main.00a57de3.js",
-    "static/js/453.d3114233.chunk.js": "/DS_6371_Project/static/js/453.d3114233.chunk.js",
+    "main.css": "/DS_6371_Project/static/css/main.7c944116.css",
+    "main.js": "/DS_6371_Project/static/js/main.3044d5ca.js",
+    "static/media/SMU Logo_InformalPeruna_Horz_digitalonly_BR.png": "/DS_6371_Project/static/media/SMU Logo_InformalPeruna_Horz_digitalonly_BR.04cb227680550c162866.png",
     "index.html": "/DS_6371_Project/index.html",
-    "main.1683fa87.css.map": "/DS_6371_Project/static/css/main.1683fa87.css.map",
-    "main.00a57de3.js.map": "/DS_6371_Project/static/js/main.00a57de3.js.map",
-    "453.d3114233.chunk.js.map": "/DS_6371_Project/static/js/453.d3114233.chunk.js.map"
+    "main.7c944116.css.map": "/DS_6371_Project/static/css/main.7c944116.css.map",
+    "main.3044d5ca.js.map": "/DS_6371_Project/static/js/main.3044d5ca.js.map"
   },
   "entrypoints": [
-    "static/css/main.1683fa87.css",
-    "static/js/main.00a57de3.js"
+    "static/css/main.7c944116.css",
+    "static/js/main.3044d5ca.js"
   ]
 }
