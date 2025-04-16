@@ -54,7 +54,7 @@ The Ames Housing dataset was compiled by Dean De Cock for use in data science ed
 
 The project employs various statistical and machine learning techniques:
 
-1. **Exploratory Data Analysis (EDA)**
+1. **Exploratory Data Analysis (EDA)** 
    - Data visualization
    - Summary statistics
    - Correlation analysis
@@ -110,4 +110,4 @@ The R Markdown document includes an interactive Shiny application that allows us
 
 ## License
 
-This project is licensed under the terms of the included LICENSE file.
+This project is licensed under the terms of the included MIT LICENSE file.
