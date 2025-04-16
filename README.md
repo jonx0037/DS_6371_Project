@@ -75,6 +75,17 @@ The project employs various statistical and machine learning techniques:
    - Influential point detection
    - Assumption validation
 
+## Project Website
+
+An interactive dashboard for this project is available at:
+[https://jonx0037.github.io/DS_6371_Project/](https://jonx0037.github.io/DS_6371_Project/)
+
+The website provides:
+- Interactive visualizations of the data
+- Details about our analysis methodologies
+- Results and findings from our models
+- Access to downloadable resources
+
 ## Interactive Features
 
 The R Markdown document includes an interactive Shiny application that allows users to:
