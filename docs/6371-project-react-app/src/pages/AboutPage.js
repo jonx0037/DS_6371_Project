@@ -13,11 +13,11 @@ const AboutPage = () => {
     {
       name: 'Jonathan Rocha',
       role: 'Data Scientist & Developer',
-      bio: 'Graduate student at Southern Methodist University pursuing a Master of Science in Data Science. Experienced in statistical analysis, machine learning, and web development.',
-      avatar: 'https://via.placeholder.com/150', // Replace with actual avatar URL
+      bio: 'Digital marketing professional and web developer transitioning into data science. With over five years of experience managing online communities and digital analytics, Jonathan brings a unique perspective combining technical expertise and communication skills. He holds an MA in English from Texas A&M University-Central Texas (2024) and a BA in History from Texas A&M University (2004). Currently a content manager at Fullsteam, Jonathan leads data-driven content strategies and manages cross-platform initiatives.',
+      avatar: '/assets/img/profile-photos/jr-profile-img.png',
       github: 'https://github.com/jonx0037',
-      linkedin: 'https://linkedin.com/in/jonathan-rocha',
-      email: 'jonathan@example.com',
+      linkedin: 'https://www.linkedin.com/in/jonathan-rocha-atx/',
+      email: 'jrocha@smu.edu',
       contributions: [
         'Development of the Century 21 neighborhood analysis',
         'Visualization of housing data relationships',
@@ -27,12 +27,12 @@ const AboutPage = () => {
     },
     {
       name: 'Samson Akomolafe',
-      role: 'Data Analyst & Statistician', 
-      bio: 'Graduate student at Southern Methodist University specializing in statistical modeling and data analysis. Passionate about using data to solve real-world problems.',
-      avatar: 'https://via.placeholder.com/150', // Replace with actual avatar URL
+      role: 'Data Analyst & Financial Consultant', 
+      bio: 'Graduate student at Southern Methodist University pursuing an MS in Data Science. With a strong background in accounting and finance, Samson holds a BSc in Accounting from the University of Lagos Nigeria and is both a COBIT-5 and Sage X3 consultant. His professional journey includes over 15 years of experience in auditing and financial consulting, having worked with Ike & Partner as a Partner-Auditor. Since moving to the USA in 2017, he has been working as a freelance consultant and paralegal.',
+      avatar: '/assets/img/profile-photos/sa-profile-ing.png',
       github: 'https://github.com/samsonakomolafe',
-      linkedin: 'https://linkedin.com/in/samson-akomolafe',
-      email: 'samson@example.com',
+      linkedin: 'https://www.linkedin.com/in/samson-olujide-a-31223a2b/',
+      email: 'sakomolafe@mail.smu.edu',
       contributions: [
         'Development of predictive models for all neighborhoods',
         'Statistical validity testing and model diagnostics',
