@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jonx0037.github.io/DS_6371_Project/sitemap.xml
