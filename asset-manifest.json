@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/DS_6371_Project/static/css/main.1683fa87.css",
-    "main.js": "/DS_6371_Project/static/js/main.27898e01.js",
+    "main.css": "/DS_6371_Project/static/css/main.d305ff66.css",
+    "main.js": "/DS_6371_Project/static/js/main.d8838a40.js",
     "static/js/453.d3114233.chunk.js": "/DS_6371_Project/static/js/453.d3114233.chunk.js",
     "static/media/PerunaR.png": "/DS_6371_Project/static/media/PerunaR.9942ea47a262ef181a96.png",
     "index.html": "/DS_6371_Project/index.html",
-    "main.1683fa87.css.map": "/DS_6371_Project/static/css/main.1683fa87.css.map",
-    "main.27898e01.js.map": "/DS_6371_Project/static/js/main.27898e01.js.map",
+    "main.d305ff66.css.map": "/DS_6371_Project/static/css/main.d305ff66.css.map",
+    "main.d8838a40.js.map": "/DS_6371_Project/static/js/main.d8838a40.js.map",
     "453.d3114233.chunk.js.map": "/DS_6371_Project/static/js/453.d3114233.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1683fa87.css",
-    "static/js/main.27898e01.js"
+    "static/css/main.d305ff66.css",
+    "static/js/main.d8838a40.js"
   ]
 }
