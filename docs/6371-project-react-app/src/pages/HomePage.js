@@ -18,14 +18,14 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import SchoolIcon from '@mui/icons-material/School';
 import DownloadIcon from '@mui/icons-material/Download';
-git push -f origin mainimport PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 // Import Peruna mascot image for hero section
 import perunaR from '../theme-assets/img/PerunaR.png';
 import smuLogoFormal from '../theme-assets/img/SMU Logo Outlined_Formal_weight.png';
 
 // Import the PDF file path
-const pdfFilePath = process.env.PUBLIC_URL + '/assets/Final_Project_Jon_Samson_Group_2.pdf';
+const pdfFilePath = "https://raw.githubusercontent.com/jonx0037/DS_6371_Project/main/Final_Project_Jon_Samson_Group_2.pdf";
 
 const HomePage = () => {
   return (

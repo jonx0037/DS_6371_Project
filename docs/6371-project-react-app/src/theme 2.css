@@ -1,0 +1,176 @@
+/* Theme Assets Import File for SMU DS 6371 Project */
+
+/* Import Roboto font for backup/UI elements */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* SMU Colors */
+:root {
+  --smu-blue: #354CA1;
+  --smu-red: #C8102E;
+  --smu-light-gray: #f5f5f5;
+  --smu-dark-gray: #333333;
+  --smu-accent: #5ab4ac;
+  
+  /* Font families according to SMU brand guidelines */
+  /* Primary fonts */
+  --smu-sans-serif-primary: 'Trade Gothic', 'Arial', 'Helvetica', sans-serif;
+  --smu-serif-primary: 'Tiempos', 'Georgia', 'Times New Roman', serif;
+  
+  /* Secondary/fallback fonts */
+  --smu-sans-serif: 'Arial', 'Helvetica', sans-serif;
+  --smu-serif: 'Georgia', 'Times New Roman', serif;
+}
+
+/* Global theme styles */
+body {
+  font-family: var(--smu-sans-serif);
+  background-color: var(--smu-light-gray);
+  color: var(--smu-dark-gray);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  font-family: var(--smu-serif);
+  font-weight: 700;
+  color: var(--smu-blue);
+  margin-top: 0;
+}
+
+h4, h5, h6 {
+  font-family: var(--smu-serif);
+  font-weight: 500;
+  color: var(--smu-blue);
+  margin-top: 0;
+}
+
+a {
+  color: var(--smu-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--smu-red);
+}
+
+.smu-primary {
+  color: var(--smu-blue);
+}
+
+.smu-secondary {
+  color: var(--smu-red);
+}
+
+.smu-accent {
+  color: var(--smu-accent);
+}
+
+/* Header styling */
+header {
+  background-color: var(--smu-blue);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Footer styling */
+footer {
+  background-color: var(--smu-dark-gray);
+  color: white;
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+
+/* Logo handling */
+.smu-logo {
+  max-height: 50px;
+  width: auto;
+}
+
+.smu-logo-large {
+  max-height: 80px;
+  width: auto;
+  margin-bottom: 1rem;
+}
+
+.smu-seal {
+  max-width: 120px;
+  height: auto;
+}
+
+.peruna-image {
+  max-height: 100px;
+  width: auto;
+}
+
+/* Main content area */
+.main-content {
+  padding: 2rem 0;
+  min-height: calc(100vh - 180px); /* Adjust based on header/footer height */
+}
+
+/* Card and content styling */
+.content-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Button styling */
+.MuiButton-containedPrimary {
+  background-color: var(--smu-blue) !important;
+}
+
+.MuiButton-containedSecondary {
+  background-color: var(--smu-red) !important;
+}
+
+/* Chart container styling */
+.chart-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+/* Page banner with Peruna */
+.page-banner {
+  background-color: var(--smu-blue);
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-banner h1 {
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.page-banner .peruna-overlay {
+  position: absolute;
+  right: 5%;
+  bottom: 0;
+  height: 90%;
+  opacity: 0.2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .smu-logo {
+    max-height: 40px;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  .main-content {
+    padding: 1rem 0;
+  }
+}

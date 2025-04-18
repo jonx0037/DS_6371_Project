@@ -19,13 +19,13 @@ const DownloadsPage = () => {
           name: 'train.csv',
           description: 'Training dataset with 1,460 observations and 81 variables (including SalePrice)',
           size: '337 KB',
-          url: 'https://github.com/jonx0037/DS_6371_Project/raw/main/data/house-prices-advanced-regression-techniques/train.csv'
+          url: 'https://github.com/jonx0037/DS_6371_Project/raw/main/house-prices-advanced-regression-techniques/train.csv'
         },
         {
           name: 'test.csv',
           description: 'Test dataset with 1,459 observations and 80 variables (excluding SalePrice)',
           size: '328 KB',
-          url: 'https://github.com/jonx0037/DS_6371_Project/raw/main/data/house-prices-advanced-regression-techniques/test.csv'
+          url: 'https://github.com/jonx0037/DS_6371_Project/raw/main/house-prices-advanced-regression-techniques/test.csv'
         }
       ]
     },

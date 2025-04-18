@@ -72,7 +72,7 @@ const AnalysisCentury21Page = () => {
             color="primary" 
             endIcon={<OpenInNewIcon />}
             component="a"
-            href="https://example.shinyapps.io/century21-analysis"
+            href="https://m15n4i-jonathan0rocha.shinyapps.io/DS_6371_Project_Jonathan_Samson/"
             target="_blank"
             rel="noopener noreferrer"
           >
