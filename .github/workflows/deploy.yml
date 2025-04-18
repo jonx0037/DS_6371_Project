@@ -30,11 +30,11 @@ jobs:
           cd docs/6371-project-react-app
           npm run build
         env:
-          CI: false
+          CI: false 
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs/6371-project-react-app/build
           branch: gh-pages
-          token: ${{ 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 }}  # Use your new personal access token
+          clean: true 
