@@ -18,7 +18,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import SchoolIcon from '@mui/icons-material/School';
 import DownloadIcon from '@mui/icons-material/Download';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+git push -f origin mainimport PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 // Import Peruna mascot image for hero section
 import perunaR from '../theme-assets/img/PerunaR.png';
